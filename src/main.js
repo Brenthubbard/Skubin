@@ -8,20 +8,20 @@ $("section").text("TEST TEXT INPUT")
 // global constants
 const ROWS = 4;
 const COLS = 4;
-// const CHARACTER = "C"
-// const OBSTACLE = "O"
-// const GOODIES = "G"
+const CHARACTER = "C"
+const OBSTACLE = "O"
+const GOODIES = "G"
 const EMPTY = "E"
 
 // state of the scoreboard, character, and map
-const storeState = () => {
-  let gameState = {}
-  return (stateChangeFunction) => {
-    const newState = stateChangeFunction(gameState)
-    gameState = { ...newState }
-    return newState
-  }
-}
+// const storeState = () => {
+//   let gameState = {}
+//   return (stateChangeFunction) => {
+//     const newState = stateChangeFunction(gameState)
+//     gameState = { ...newState }
+//     return newState
+//   }
+// }
 
 // const storeState = () => {
 //   let currentState = {};
@@ -37,16 +37,25 @@ const storeState = () => {
 //const blueFood = changeState("soil")(5)
 //blueFood(plant)
 //const fedPlant = stateControl(blueFood);
-//> { soil: 5 }
+//   > { soil: 5 }
 //const fedPlant = stateControl(blueFood());<--- Not supposed to do this
 
 // closure to protect our state
-const stateClosure = storeState()
-const gameStateClosure = storeState("gameState")
+// const stateClosure = storeState()
+// const gameStateClosure = stateClosure()("gameState")
 
 // set up initial state
-const initialState = { scoreBoard: 0, character: 0, map: createMap(ROWS, COLS) }
-gameStateClosure(initialState)
+// const initialState = { scoreBoard: 0, character: 0, map: createMap(ROWS, COLS) }
+// gameStateClosure(initialState)
+
+// state object
+let state = { scoreBoard: 0, character: 0, map: createMap(ROWS, COLS) }
+
+const updateState = (newData) => {
+  const newState = {...state, ...newData}
+  state = newState
+  return state
+}
 
 // helper function to create an array with x,y coordinates
 function createMap(rowCount, columnCount) {
@@ -66,36 +75,25 @@ function addToCell(map, x, y, element) {
 }
 
 // draw the map on the screen/in the browser
-// function renderMap() {
-//   for (let x = 0; x < ROWS; x += 1) {
-//     for (let y = 0; y < COLS; y += 1) {
-//       // console.log(map[x][y])
-//       $(`#${y + 1}${x + 1}`).text(map[x][y])
-//     }
-//   }
-// }
+function renderMap() {
+  for (let x = 0; x < ROWS; x += 1) {
+    for (let y = 0; y < COLS; y += 1) {
+      // console.log(map[x][y])
+      $(`#${y + 1}${x + 1}`).text(state.map[x][y])
+    }
+  }
+}
 
-console.dir(stateClosure.gameState)
-console.dir(storeState)
-console.dir(storeState.gameState)
+// create the starting map
+const initialMap = state.map
 // start the game with the player in the upper left corner
-// map[1][0] = CHARACTER
-// // start the game with an obstacle
-// map[3][3] = OBSTACLE
-// // start the game with a goodie
-// map[1][3] = GOODIES
-// renderMap()
-
-// TESTING the plane
-// map[0][3] = "03"
-// renderMap()
-// map[3][0] = "30"
-// renderMap()
-// map[1][0] = "10"
-// renderMap()
-// map[3][3] = "33"
-// renderMap()
-
+initialMap[1][0] = CHARACTER
+// start the game with an obstacle
+initialMap[3][3] = OBSTACLE
+// start the game with a goodie
+initialMap[1][3] = GOODIES
+updateState({ map: initialMap })
+renderMap()
 
 
 // we need turns
