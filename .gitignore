@@ -1,0 +1,11 @@
+# ignore all files/dependencies installed by npm
+node_modules/
+
+# ignore all environmental variable files
+*.env
+
+# ignore generated build from webpack
+dist/
+
+# ignore the coverage folder
+coverage/
