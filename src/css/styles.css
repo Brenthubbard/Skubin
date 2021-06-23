@@ -1,0 +1,17 @@
+body{
+  background-color: rgb(24, 44, 16);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: white;
+}
+h1{
+  font-size: 300%;
+  font-weight: bold;
+  background-image: linear-gradient(to left,red,yellow,yellow,pink,rgb(5, 238, 5),red, yellow, rgb(5, 238, 5));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.btn{
+  background-color: rgb(113, 245, 26);
+  color: white;
+  font-weight: bold;
+}
