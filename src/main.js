@@ -2,80 +2,28 @@ import $ from 'jquery'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './css/styles.css'
-
-$("section").text("TEST TEXT INPUT")
+import { createMap } from './js/helpers'
 
 // global constants
-const ROWS = 4;
-const COLS = 4;
+const ROWS = 4
+const COLS = 4
 const CHARACTER = "C"
 const OBSTACLE = "O"
 const GOODIES = "G"
 const EMPTY = "E"
 
-// state of the scoreboard, character, and map
-// const storeState = () => {
-//   let gameState = {}
-//   return (stateChangeFunction) => {
-//     const newState = stateChangeFunction(gameState)
-//     gameState = { ...newState }
-//     return newState
-//   }
-// }
-
-// const storeState = () => {
-//   let currentState = {};
-//   return (stateChangeFunction) => {
-//     const newState = stateChangeFunction(currentState);
-//     currentState = {...newState};
-//     return newState;
-//   }
-// }
-//let plant = { soil: 0, light: 0, water: 0 }
-//const feed = changeState("soil");
-//feed(5)(plant)
-//const blueFood = changeState("soil")(5)
-//blueFood(plant)
-//const fedPlant = stateControl(blueFood);
-//   > { soil: 5 }
-//const fedPlant = stateControl(blueFood());<--- Not supposed to do this
-
-// closure to protect our state
-// const stateClosure = storeState()
-// const gameStateClosure = stateClosure()("gameState")
-
-// set up initial state
-// const initialState = { scoreBoard: 0, character: 0, map: createMap(ROWS, COLS) }
-// gameStateClosure(initialState)
-
 // state object
-let state = { scoreBoard: 0, character: 0, map: createMap(ROWS, COLS) }
-
-const updateState = (newData) => {
-  const newState = {...state, ...newData}
-  state = newState
-  return state
+let state = {
+  scoreBoard: 0,
+  character: { speed: 2, health: 3, patches: 10, sixers: 0, skiWax: 10, hotToddies: 0 },
+  map: createMap(ROWS, COLS, EMPTY),
+  mode: "tubin"
 }
 
-// helper function to create an array with x,y coordinates
-function createMap(rowCount, columnCount) {
-  const map = [];
-  for (let x = 0; x < rowCount; x++) {
-    map[x] = []; //set up inner array
-    for (let y = 0; y < columnCount; y++) {
-      addToCell(map, x, y, EMPTY);
-    }
-  }
-  return map;
-}
-
-// helper function to add an element to the map at x,y coords
-function addToCell(map, x, y, element) {
-  map[x][y] = element; //create a new object on the x and y
-}
+const updateState = newData => state = {...state, ...newData}
 
 // draw the map on the screen/in the browser
-function renderMap() {
+const renderMap = () => {
   for (let x = 0; x < ROWS; x += 1) {
     for (let y = 0; y < COLS; y += 1) {
       // console.log(map[x][y])
@@ -84,35 +32,55 @@ function renderMap() {
   }
 }
 
-// create the starting map
-const initialMap = state.map
-// start the game with the player in the upper left corner
-initialMap[1][0] = CHARACTER
-// start the game with an obstacle
-initialMap[3][3] = OBSTACLE
-// start the game with a goodie
-initialMap[1][3] = GOODIES
-updateState({ map: initialMap })
-renderMap()
+// render the updated scoreboard
+const renderUpdatedScoreboard = () => {
+  $("#health").text(state.character.health)
+  if (state.mode === "tubin") {
+    $("#skiWax").parent().hide()
+    $("#hotToddies").parent().hide()
+    $("#patches").text(state.character.patches)
+    $("#sixers").text(state.character.sixers)
+  } else {
+    $("#patches").parent().hide()
+    $("#sixers").parent().hide()
+    $("#skiWax").text(state.character.skiWax)
+    $("#hotToddies").text(state.character.hotToddies)
+  }
+}
 
+// initializing the game/map
+const setupGame = () => {
+  // show the initial scoreboard
+  renderUpdatedScoreboard()
+  // create the starting map w/character, goodies, and obstacle
+  const initialMap = state.map
+  initialMap[1][0] = CHARACTER
+  initialMap[3][3] = OBSTACLE
+  initialMap[1][3] = GOODIES
+  updateState({ map: initialMap })
+  renderMap()
+}
 
-// we need turns
-// we need to be able move things from one square to another
-// we need things: characters, obstacles, enemies
+// game loop while character has not hit an obstacle
+while (state.character.health > 0) {
+  setupGame()
+  // taking turns
+    // enable left/right buttons
+    // move left/right
+    // disable left/right buttons
+    // move all objects up and re-render
+    // check for collision
+      // if goodie, add to character's goodies
+      // if obstacle, reduce health by 1
+    // show updated scoreboard
+  renderUpdatedScoreboard()
 
-// scoreboard
-// how much health they have left,
-// how many points/toddies/patch kits/six packs
-// movement speed - need patch kit and ski wax to keep moving
+  console.log("LEAVING GAME LOOP")
+  break; // TODO remove once we not longer have an infinite loop
+  // end of the game? caught by avalanche, air runs out and you sink
+}
 
-// end of the game? caught by avalanche, air runs out and you sink
-
-// what does a character have?
-// ski - pick up hot toddies, ski wax
-// tube - six packs, patch kit
-// what does a character do
-// levelling, what goes up?
-// movement, square to square
+console.log(state)
 
 // different maps/levels
 // double black diamond
@@ -122,4 +90,3 @@ renderMap()
 // trees, rocks, drops/waterfall/cliff
 // ski - tree well, avalanche
 // tube - whirlpool/eddy
-
