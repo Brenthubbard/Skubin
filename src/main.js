@@ -83,7 +83,8 @@ const detectCollision = () => {
 }
 
 const moveObjectsUp = () => {
-  // for each object,
+  // for each position on the map
+  // for (i=0, )
     // if the object is not EMPTY or CHARACTER,
     // check for a collision
     detectCollision()
@@ -97,7 +98,6 @@ $(".directionButton").on("click", function(event) {
   renderMap()
   renderUpdatedScoreboard()
 })
-
 console.log(state)
 
 // different maps/levels
