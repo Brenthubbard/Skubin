@@ -15,7 +15,7 @@ const EMPTY = "E"
 // state object
 let state = {
   scoreBoard: 0,
-  character: { speed: 2, health: 3, patches: 10, sixers: 0, skiWax: 10, hotToddies: 0 },
+  character: { speed: 2, health: 3, patches: 10, sixers: 0, skiWax: 10, hotToddies: 0, location: 0 },
   map: createMap(ROWS, COLS, EMPTY),
   mode: "tubin"
 }
@@ -54,31 +54,45 @@ const setupGame = () => {
   renderUpdatedScoreboard()
   // create the starting map w/character, goodies, and obstacle
   const initialMap = state.map
-  initialMap[1][0] = CHARACTER
+  initialMap[0][0] = CHARACTER
   initialMap[3][3] = OBSTACLE
   initialMap[1][3] = GOODIES
   updateState({ map: initialMap })
   renderMap()
 }
 
-// game loop while character has not hit an obstacle
-while (state.character.health > 0) {
-  setupGame()
-  // taking turns
-    // enable left/right buttons
-    // move left/right
-    // disable left/right buttons
-    // move all objects up and re-render
-    // check for collision
-      // if goodie, add to character's goodies
-      // if obstacle, reduce health by 1
-    // show updated scoreboard
-  renderUpdatedScoreboard()
+setupGame()
 
-  console.log("LEAVING GAME LOOP")
-  break; // TODO remove once we not longer have an infinite loop
-  // end of the game? caught by avalanche, air runs out and you sink
-}
+// taking turns
+  // enable left/right buttons
+  // move left/right
+  // disable left/right buttons
+  // move all objects up and re-render
+  // check for collision
+    // if goodie, add to character's goodies
+    // if obstacle, reduce health by 1
+  // show updated scoreboard
+
+// move the character to the left
+$("#left").on("click", function() {
+  console.log("TAKING TURN")
+  if (state.character.location === 0) return
+  state.map[state.character.location][0] = EMPTY
+  state.map[state.character.location - 1][0] = CHARACTER
+  state.character.location = state.character.location - 1
+  renderMap()
+  renderUpdatedScoreboard()
+})
+
+$("#right").on("click", function() {
+  console.log("TAKING TURN")
+  if (state.character.location === 3) return
+  state.map[state.character.location][0] = EMPTY
+  state.map[state.character.location + 1][0] = CHARACTER
+  state.character.location = state.character.location + 1
+  renderMap()
+  renderUpdatedScoreboard()
+})
 
 console.log(state)
 
