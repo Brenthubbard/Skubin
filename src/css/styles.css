@@ -22,3 +22,6 @@ h1 {
   min-height: 18vh;
   font-size: 90px;
 }
+button{
+  width: 100%;
+}

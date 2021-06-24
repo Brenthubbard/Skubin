@@ -63,33 +63,37 @@ const setupGame = () => {
 
 setupGame()
 
-// taking turns
-  // enable left/right buttons
-  // move left/right
-  // disable left/right buttons
-  // move all objects up and re-render
-  // check for collision
-    // if goodie, add to character's goodies
-    // if obstacle, reduce health by 1
-  // show updated scoreboard
+const moveCharacter = (direction) => {
+  if (direction === "left") {
+    if (state.character.location === 0) return
+    state.map[state.character.location][0] = EMPTY
+    state.map[state.character.location - 1][0] = CHARACTER
+    state.character.location = state.character.location - 1
+  } else {
+    if (state.character.location === 3) return
+    state.map[state.character.location][0] = EMPTY
+    state.map[state.character.location + 1][0] = CHARACTER
+    state.character.location = state.character.location + 1
+  }
+}
 
-// move the character to the left
-$("#left").on("click", function() {
-  console.log("TAKING TURN")
-  if (state.character.location === 0) return
-  state.map[state.character.location][0] = EMPTY
-  state.map[state.character.location - 1][0] = CHARACTER
-  state.character.location = state.character.location - 1
-  renderMap()
-  renderUpdatedScoreboard()
-})
+const detectCollision = () => {
+  // if the CHARACTER is 1 space up the y axis
+  // decrement the character's health by 1
+}
 
-$("#right").on("click", function() {
-  console.log("TAKING TURN")
-  if (state.character.location === 3) return
-  state.map[state.character.location][0] = EMPTY
-  state.map[state.character.location + 1][0] = CHARACTER
-  state.character.location = state.character.location + 1
+const moveObjectsUp = () => {
+  // for each object,
+    // if the object is not EMPTY or CHARACTER,
+    // check for a collision
+    detectCollision()
+    // move it up the y axis 1
+}
+
+// move the character to the left or right
+$(".directionButton").on("click", function(event) {
+  moveCharacter(event.target.id)
+  moveObjectsUp()
   renderMap()
   renderUpdatedScoreboard()
 })
